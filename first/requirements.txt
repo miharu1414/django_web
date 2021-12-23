@@ -1,0 +1,6 @@
+Django==2.0.3
+numpy
+Pillow
+pytz
+scikit-learn
+scipy
