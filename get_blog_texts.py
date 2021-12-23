@@ -3,7 +3,7 @@ import requests
 from bs4.element import Tag, NavigableString
 from bs4 import BeautifulSoup
 
-
+"""dfsdfs"""
 def _parse_li(li):
     """
     リストアイテム(li)のテキストを返す。
