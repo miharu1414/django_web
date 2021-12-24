@@ -41,7 +41,7 @@ def get_blog_texts(url: str):
     response = requests.get(url)
     # parse html
     soup = BeautifulSoup(response.text, 'html.parser')
-    contents = soup.find('div')
+    contents = soup.find('body')
     texts = ["0"]
     # extract all <p>...</p> texts
     try:
@@ -98,11 +98,14 @@ def input_dict(BLOG):
     for i in BLOG.keys():
         url = BLOG[i]["url"]
         print("#{} getting texts from: {}".format(i, url))
-        BLOG[i]["texts"] =  get_blog_texts(url)
+        try:
+            BLOG[i]["texts"] =  get_blog_texts(url)
+            BLOG[i]["texts"] = [t.replace(' ','').lower() for t in BLOG[i]["texts"]]
+        except:
+            BLOG[i]["texts"] = [""]
+            print("error: not getting")
         time.sleep(1)
 
-    for i in BLOG.keys():
-        BLOG[i]["texts"] = [t.replace(' ','').lower() for t in BLOG[i]["texts"]]
         
 def wakati(BLOG,work,WAKATI):    
               # 各ブログの名詞を分かち書きして登録
