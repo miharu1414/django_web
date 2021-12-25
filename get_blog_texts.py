@@ -113,6 +113,7 @@ def wakati(BLOG,work,WAKATI):
     token_filters = [POSStopFilter(['記号','助詞','助動詞','動詞'])]
     a = Analyzer(tokenizer=tokenizer, token_filters=token_filters)
 
+
     for i in BLOG.keys():
         texts_flat = "".join(BLOG[i]["texts"])
         tokens = a.analyze(texts_flat)
