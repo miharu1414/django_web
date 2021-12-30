@@ -58,6 +58,7 @@ input_dict(BLOG)
 
 
 for i in BLOG.keys():
+    print(BLOG[i]["texts"])
     BLOG[i]["texts"] = [t.replace(' ','').lower() for t in BLOG[i]["texts"]]
     print( BLOG[i]["texts"])
 
