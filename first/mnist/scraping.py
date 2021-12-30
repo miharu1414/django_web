@@ -3,7 +3,7 @@ import re
 from numpy import result_type
 from numpy.lib.function_base import delete
 from sklearn.feature_extraction.text import CountVectorizer
-from get_blog_texts import get_blog_texts,url_list_cal,input_dict,wakati,calc_tf,calc_idf,calc_tfidf,sum_emerge,is_japanese
+from .get_blog_texts import get_blog_texts,url_list_cal,input_dict,wakati,calc_tf,calc_idf,calc_tfidf,sum_emerge,is_japanese
 import requests
 from bs4 import BeautifulSoup
 
@@ -14,7 +14,7 @@ def Scraping(word,num_site):
 
     # Google検索するキーワードを設定
     search_word = word
-    search_word += ""
+    search_word += "わかりやすく"
     # 上位から何件までのサイトを抽出するか指定する
     num_site = int(num_site)
     pages_num = num_site + 1
@@ -117,6 +117,9 @@ def Scraping(word,num_site):
         elif sum_emerge(i_words,count_site_correct,BLOG) > delete_ratio*count_site_correct:
             del WORDS[i_words]
             continue
+        elif sum_emerge(i_words,count_site_correct,BLOG) <1:
+            del WORDS[i_words]
+            continue
         i_words += 1
         
             
@@ -128,7 +131,7 @@ def Scraping(word,num_site):
     for index in range(count_site_correct):
         try:
             print("# TF values of blog:{}".format(BLOG[index]["url"]))
-            result += "# TF values of blog:" + str(BLOG[index]["url"]) + "\n"
+            #result += "# TF values of blog:" + str(BLOG[index]["url"]) + "\n"
             sample_tfs = [calc_tf(index, w_idx,BLOG) for w_idx, word in enumerate(WORDS)]
             tfs_sorted = sorted(enumerate(sample_tfs), key=lambda x:x[1], reverse=True)
             for i, tf in tfs_sorted[:10]:
@@ -144,15 +147,15 @@ def Scraping(word,num_site):
             idfs_sorted  = sorted(enumerate(IDFS), key=lambda x:x[1], reverse=True)
             
             print("# IDF values")
-            result += "# IDF values\n"
+            #result += "# IDF values\n"
             for w_idx, idf in idfs_sorted[:10]:
                 print("{}\t{}".format(WORDS[w_idx], round(idf, 4)))
-                result += str(WORDS[w_idx]) + "\t" + str(round(tf,4)) + "\n"
+                #result += str(WORDS[w_idx]) + "\t" + str(round(tf,4)) + "\n"
             print("︙")
             result += "︙\n" 
             for w_idx, idf in idfs_sorted[-10:]:
                 print("{}\t{}".format(WORDS[w_idx], round(idf, 4)))
-                result += str(WORDS[w_idx]) + "\t" + str(round(tf,4)) + "\n"
+                #result += str(WORDS[w_idx]) + "\t" + str(round(tf,4)) + "\n"
             for w_idx, idf in idfs_sorted:
                 if count_right == 0:
                     SUM_IDF[str(WORDS[w_idx])] = round(idf, 4)
@@ -160,13 +163,13 @@ def Scraping(word,num_site):
                     SUM_IDF[str(WORDS[w_idx])] += round(idf, 4)
                     
             print("# TF-IDF values")
-            result += "# TF-IDF values\n"
+            #result += "# TF-IDF values\n"
             TF_IDF = [calc_tfidf(index,w_idx,BLOG) for w_idx, word in enumerate(WORDS)]
             tf_idfs_sorted  = sorted(enumerate(TF_IDF), key=lambda x:x[1], reverse=True)
             
             for w_idx, tf_idf in tf_idfs_sorted[:10]:
                 print("{}\t{}".format(WORDS[w_idx], round(tf_idf, 4)))
-                result += str(WORDS[w_idx]) + "\t" + str(round(tf_idf,4)) + "\n"
+                #result += str(WORDS[w_idx]) + "\t" + str(round(tf_idf,4)) + "\n"
             for w_idx, tf_idf in tf_idfs_sorted:
                 if count_right == 0:
                     SUM_TFIDF[str(WORDS[w_idx])] = round(tf_idf, 4)
@@ -188,11 +191,13 @@ def Scraping(word,num_site):
         
 
     print("\nトータルの集計 IDF")
+    result += "トータルの集計 TDF\n"
     for i in range(min(10,len(SUM_IDF))):
         print("{}\t{}".format(SUM_IDF[i][0], round(SUM_IDF[i][1], 4)))
         result += str(SUM_TF[i][0]) +"\t" +  str(round(SUM_TF[i][1], 4)) + "\n"
 
     print("\nトータルの集計 TF-IDF")
+    result += "トータルの集計 TF-IDF\n"
     for i in range(min(10,len(SUM_TFIDF))):
         print("{}\t{}".format(SUM_TFIDF[i][0], round(SUM_TFIDF[i][1], 4)))
         result += str(SUM_TF[i][0]) +"\t" +  str(round(SUM_TF[i][1], 4)) + "\n"

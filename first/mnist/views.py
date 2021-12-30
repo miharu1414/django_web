@@ -1,26 +1,28 @@
 import base64
 from io import BytesIO
-from django.shortcuts import render
+import re
+from django.shortcuts import redirect, render
 from django.views import generic
-from .forms import ImageUploadForm
+from .forms import ImageUploadForm, KakikomiForm
 from .lib import predict
 import numpy as np
 from PIL import Image
-from scraping import Scraping
-from scraping_pdf import Scraping_pdf
+from .scraping import Scraping
 
 
 class UploadView(generic.FormView):
     template_name = 'mnist/upload.html'
-    form_class = ImageUploadForm
+    form_class = KakikomiForm
 
-    def form_valid(self, request):
-        # アップロードファイル本体を取得
-        request.GET.get("Word")
-        request.GET.get("Num_site")
+
+    def form_valid(self, form):
+     # アップロードファイル本体を取得
+        Word = form.cleaned_data['file']
+        Num_site = 1
+
         # 推論した結果を、テンプレートへ渡して表示
         context = {
-            'result': predict(),
+            'result': Scraping(Word,Num_site),
         }
         return render(self.request, 'mnist/result.html', context)
 

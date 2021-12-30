@@ -1,10 +1,7 @@
 {% extends 'mnist/base.html' %}
 {% block content %}
-<form action="" method="GET" >
-  <a>Word:</a><input type="text" id="Word" name="Word">
-  <br>
-  <a>Num_site:</a><input type="text" id="Num_site" name="Num_site">
-  <br>
+<form action="" method="POST" enctype='multipart/form-data'>
+  {{ form.file }}<hr>
   {% csrf_token %}
   <input type="submit" class="btn btn-outline-primary btn-lg" value="送信する">
 </form>                                                                                                                   

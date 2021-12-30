@@ -2,7 +2,7 @@
 from numpy.core.numeric import correlate
 from numpy.lib.function_base import delete
 from sklearn.feature_extraction.text import CountVectorizer
-from get_blog_texts import get_blog_texts,url_list_cal,input_dict,wakati,calc_tf,calc_idf,calc_tfidf,sum_emerge,is_japanese
+from .get_blog_texts import get_blog_texts,url_list_cal,input_dict,wakati,calc_tf,calc_idf,calc_tfidf,sum_emerge,is_japanese
 import requests
 from bs4 import BeautifulSoup
 
@@ -18,17 +18,17 @@ from io import StringIO
 import urllib.request
 import time
 
-def Scraping_pdf():
+def Scraping_pdf(Word, Num_site):
 #登場しすぎた場合に削除する基準　　　　1サイト当り何回登場したら排除するか
     result = ""
     delete_ratio = 100
 
     # Google検索するキーワードを設定
-    search_word = input("検索する単語:")
+    search_word = Word
     search_word += " PDF"
     # 上位から何件までのサイトを抽出するか指定する
 
-    num_site = int(input("サイト件数:"))
+    num_site = int(Num_site)
     pages_num = num_site + 1
 
     print(f'【検索ワード】{search_word}')
