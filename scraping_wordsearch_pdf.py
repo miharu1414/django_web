@@ -1,17 +1,31 @@
 #edit yourself
+from numpy.core.numeric import correlate
 from numpy.lib.function_base import delete
 from sklearn.feature_extraction.text import CountVectorizer
 from get_blog_texts import get_blog_texts,url_list_cal,input_dict,wakati,calc_tf,calc_idf,calc_tfidf,sum_emerge,is_japanese
 import requests
 from bs4 import BeautifulSoup
 
+
+
+# 必要なPdfminer.sixモジュールのクラスをインポート
+from pdfminer.pdfinterp import PDFResourceManager
+from pdfminer.converter import TextConverter
+from pdfminer.pdfinterp import PDFPageInterpreter
+from pdfminer.pdfpage import PDFPage
+from pdfminer.layout import LAParams
+from io import StringIO
+import urllib.request
+import time
+
 #登場しすぎた場合に削除する基準　　　　1サイト当り何回登場したら排除するか
 delete_ratio = 100
 
 # Google検索するキーワードを設定
 search_word = input("検索する単語:")
-search_word += ""
+search_word += " PDF"
 # 上位から何件までのサイトを抽出するか指定する
+
 num_site = int(input("サイト件数:"))
 pages_num = num_site + 1
 
@@ -37,8 +51,10 @@ for rank, site in zip(range(1, pages_num), search_site_list):
     site_url = site['href'].replace('/url?q=', '')
     # 結果を出力する
     print(str(rank) + "位: " + site_title + ": " + site_url)
-    if site_title.find("PDF")!=-1 or site_url.find("twitter")  != -1 or site_title.find("マイナビ")  != -1:
-        print("pdfなので除外")
+    if site_title.find("PDF")!=-1:
+        pass
+    else:
+        print("pdfじゃないので除外")
         continue
     count_site_correct += 1
     url_list.append(site_url)
@@ -51,14 +67,55 @@ print(count_site_correct)
 
 
 BLOG = {}
-url_list_cal(url_list, BLOG)
 
-#textの抽出
-input_dict(BLOG)
+rightpdf = 0
+i =0
+"""pdf用のコード"""
+while i < count_site_correct:
+    pdf_url = url_list[i] 
+    # 標準組込み関数open()でモード指定をbinaryでFileオブジェクトを取得
+
+
+    url = pdf_url
+    save_name='only.pdf'
+    try:
+        urllib.request.urlretrieve(url, save_name)
+        time.sleep(1)
+    
+        fp = open(save_name, 'rb')
+        
+
+        # 出力先をPythonコンソールするためにIOストリームを取得
+        outfp = StringIO()
+
+
+        # 各種テキスト抽出に必要なPdfminer.sixのオブジェクトを取得する処理
+
+        rmgr = PDFResourceManager() # PDFResourceManagerオブジェクトの取得
+        lprms = LAParams()          # LAParamsオブジェクトの取得
+        device = TextConverter(rmgr, outfp, laparams=lprms)    # TextConverterオブジェクトの取得
+        iprtr = PDFPageInterpreter(rmgr, device) # PDFPageInterpreterオブジェクトの取得
+        
+        # PDFファイルから1ページずつ解析(テキスト抽出)処理する
+        for page in PDFPage.get_pages(fp):
+            iprtr.process_page(page)
+
+        text = outfp.getvalue()  # Pythonコンソールへの出力内容を取得
+        BLOG[rightpdf] = {}
+        BLOG[rightpdf]["texts"] = text
+        fp.close()
+        
+        BLOG[rightpdf]["url"] = url
+        rightpdf +=1
+    except:
+        pass
+    i += 1
+    
+count_site_correct = rightpdf
+
 
 
 for i in BLOG.keys():
-    print(BLOG[i]["texts"])
     BLOG[i]["texts"] = [t.replace(' ','').lower() for t in BLOG[i]["texts"]]
     print( BLOG[i]["texts"])
 

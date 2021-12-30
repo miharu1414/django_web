@@ -110,8 +110,9 @@ def input_dict(BLOG):
 def wakati(BLOG,work,WAKATI):    
               # 各ブログの名詞を分かち書きして登録
     tokenizer = Tokenizer()
-    token_filters = [POSStopFilter(['記号','助詞','助動詞','動詞'])]
+    token_filters = [POSStopFilter(['記号','助詞','助動詞','動詞','形容詞','副詞'])]
     a = Analyzer(tokenizer=tokenizer, token_filters=token_filters)
+
 
     for i in BLOG.keys():
         texts_flat = "".join(BLOG[i]["texts"])

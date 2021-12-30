@@ -1,18 +1,29 @@
-from bs4 import BeautifulSoup
-import requests
+# 必要なPdfminer.sixモジュールのクラスをインポート
+from pdfminer.pdfinterp import PDFResourceManager
+from pdfminer.converter import TextConverter
+from pdfminer.pdfinterp import PDFPageInterpreter
+from pdfminer.pdfpage import PDFPage
+from pdfminer.layout import LAParams
+from io import StringIO
 
-url = "https://dev.classmethod.jp/cloud/aws/aws-nw-architectures-net320/"
-response = requests.get(url)
-soup = BeautifulSoup(response.text, 'html.parser')
-type(soup)
-contents = soup.find('div')
-print(contents.get_text())
-print(soup.get_text())
-texts_p = [c.get_text() for c in contents.find_all('p')]
+# 標準組込み関数open()でモード指定をbinaryでFileオブジェクトを取得
+fp = open("test.pdf", 'rb')
 
-import re
+# 出力先をPythonコンソールするためにIOストリームを取得
+outfp = StringIO()
 
-# p 要素の抽出
-texts_p = [c.get_text() for c in contents.find_all('p')]
-# 空白行削除 + 改行コード削除
-texts_p = [t.replace('\n','') for t in texts_p if re.match('\S', t)]
+
+# 各種テキスト抽出に必要なPdfminer.sixのオブジェクトを取得する処理
+
+rmgr = PDFResourceManager() # PDFResourceManagerオブジェクトの取得
+lprms = LAParams()          # LAParamsオブジェクトの取得
+device = TextConverter(rmgr, outfp, laparams=lprms)    # TextConverterオブジェクトの取得
+iprtr = PDFPageInterpreter(rmgr, device) # PDFPageInterpreterオブジェクトの取得
+
+# PDFファイルから1ページずつ解析(テキスト抽出)処理する
+for page in PDFPage.get_pages(fp):
+    iprtr.process_page(page)
+
+text = outfp.getvalue()  # Pythonコンソールへの出力内容を取得
+
+print(text)
