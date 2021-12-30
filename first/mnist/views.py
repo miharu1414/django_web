@@ -12,20 +12,14 @@ class UploadView(generic.FormView):
     template_name = 'mnist/upload.html'
     form_class = ImageUploadForm
 
-    def form_valid(self, form):
+    def form_valid(self, request):
         # アップロードファイル本体を取得
-        file = form.cleaned_data['file']
+        request.GET.get("word")
 
-        # ファイルを、28*28にリサイズし、グレースケール(モノクロ画像)
-        img = Image.open(file).resize((28, 28)).convert('L')
-
-        # 学習時と同じ形に画像データを変換する
-        img_array = np.asarray(img) / 255
-        img_array = img_array.reshape(1, 784)
 
         # 推論した結果を、テンプレートへ渡して表示
         context = {
-            'result': predict(img_array),
+            'result': predict(),
         }
         return render(self.request, 'mnist/result.html', context)
 
