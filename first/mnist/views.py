@@ -6,6 +6,8 @@ from .forms import ImageUploadForm
 from .lib import predict
 import numpy as np
 from PIL import Image
+from scraping import Scraping
+from scraping_pdf import Scraping_pdf
 
 
 class UploadView(generic.FormView):
@@ -14,9 +16,8 @@ class UploadView(generic.FormView):
 
     def form_valid(self, request):
         # アップロードファイル本体を取得
-        request.GET.get("word")
-
-
+        request.GET.get("Word")
+        request.GET.get("Num_site")
         # 推論した結果を、テンプレートへ渡して表示
         context = {
             'result': predict(),
