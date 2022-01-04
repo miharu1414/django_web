@@ -5,7 +5,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from .get_blog_texts import get_blog_texts,url_list_cal,input_dict,wakati,calc_tf,calc_idf,calc_tfidf,sum_emerge,is_japanese
 import requests
 from bs4 import BeautifulSoup
-
+import re
 
 
 # 必要なPdfminer.sixモジュールのクラスをインポート
@@ -162,12 +162,17 @@ def Scraping_pdf(Word, Num_site):
 
     #数字,英字だけのもの　や　多すぎるものは排除
     i_words = 0
+    re_hiragana = re.compile(r'^[あ-ん]+$')  #ひらがなだけのものを排除
     print()
     while i_words < len(WORDS):
         if WORDS[i_words].isdecimal():#数字のみなら削除
             del WORDS[i_words]
             continue
         elif is_japanese(WORDS[i_words]) == False:#英語のみなら削除
+            del WORDS[i_words]
+            continue
+                # -*- coding: utf-8 -*-
+        elif re_hiragana.fullmatch(WORDS[i_words]):
             del WORDS[i_words]
             continue
         elif sum_emerge(i_words,count_site_correct,BLOG) > delete_ratio*count_site_correct:

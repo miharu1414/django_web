@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from .get_blog_texts import get_blog_texts,url_list_cal,input_dict,wakati,calc_tf,calc_idf,calc_tfidf,sum_emerge,is_japanese
 import requests
 from bs4 import BeautifulSoup
-
+import re
 def Scraping(word,num_site):
     result = ""
     #登場しすぎた場合に削除する基準　　　　1サイト当り何回登場したら排除するか
@@ -104,14 +104,20 @@ def Scraping(word,num_site):
                 print(" - {}\t{}: WORDS[{}]".format(count, WORDS[w_idx], w_idx))
     """
 
+
     #数字,英字だけのもの　や　多すぎるものは排除
     i_words = 0
     print()
+    re_hiragana = re.compile(r'^[あ-ん]+$')
     while i_words < len(WORDS):
         if WORDS[i_words].isdecimal():#数字のみなら削除
             del WORDS[i_words]
             continue
         elif is_japanese(WORDS[i_words]) == False:#英語のみなら削除
+            del WORDS[i_words]
+            continue
+        # -*- coding: utf-8 -*-
+        elif re_hiragana.fullmatch(WORDS[i_words]):
             del WORDS[i_words]
             continue
         elif sum_emerge(i_words,count_site_correct,BLOG) > delete_ratio*count_site_correct:

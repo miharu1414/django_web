@@ -8,6 +8,8 @@ from .lib import predict
 import numpy as np
 from PIL import Image
 from .scraping import Scraping
+from .scraping_pdf import Scraping_pdf
+from .pdf_to_text import Pdf_to_text
 
 
 class UploadView(generic.FormView):
@@ -23,6 +25,23 @@ class UploadView(generic.FormView):
         # 推論した結果を、テンプレートへ渡して表示
         context = {
             'result': Scraping(Word,Num_site),
+        }
+        return render(self.request, 'mnist/result.html', context)
+    
+
+class Pdf_to_text_View(generic.FormView):
+    template_name = 'mnist/upload.html'
+    form_class = KakikomiForm
+
+
+    def form_valid(self, form):
+     # アップロードファイル本体を取得
+        pdf_url = form.cleaned_data['file']
+        
+
+        # 推論した結果を、テンプレートへ渡して表示
+        context = {
+            'result': Pdf_to_text(pdf_url),
         }
         return render(self.request, 'mnist/result.html', context)
 
