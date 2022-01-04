@@ -1,6 +1,7 @@
 {% extends 'mnist/base.html' %}
 
 {% block content %}
+<div class="container-xl">
 <form action="" method="POST" enctype='multipart/form-data'>
 <canvas id="canvas" width="140" height="140"></canvas>
 <hr>
@@ -62,4 +63,5 @@ $('#send').on('click',function(e){
     form.submit();
 });
 </script>
+</div>
 {% endblock %}

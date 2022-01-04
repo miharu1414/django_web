@@ -1,21 +1,26 @@
 {% extends 'mnist/base.html' %}
 {% block content %}
-<form action="" method="POST" enctype='multipart/form-data'>
-  {{ form.file }}<hr>
-  {% csrf_token %}
-  <label><input type="checkbox" id="check1">webサイト</label>
-  <label style="display: block;"><input type="checkbox" id="check2">pdfファイル</label>
-  <button type="button" class="btn btn-secondary" onclick="location.reload()">入力されている単語をけす</button>
-  <input type="submit" class="btn btn-outline-primary btn-lg" value="送信する" id="checkButton">
-  <script>
-    function bottonClick() {
-      if(checkbox1.checked){
-        //ここにwebスクレイピングの実行
-      }
-      else if(checkbox2.checked){
-        //ここにpdfスクレイピングの実行
-      }
-    }
-  </script>
-</form>                                                                                                                   
-{% endblock %}
+<h1>レポートの作成を補助します</h3>
+    <p class="lead">調べたい単語を入れましょう．それに関連した単語を表示します</p>
+    <div class="container-xl">
+        <form action="" method="POST" enctype='multipart/form-data'>
+            {{ form.file }}
+            <hr>
+            {% csrf_token %}
+            <label><input type="checkbox" id="check1">webサイト</label>
+            <label style="display: block;"><input type="checkbox" id="check2">pdfファイル</label>
+            <button type="button" class="btn btn-secondary" onclick="location.reload()">単語を削除</button>
+            <input type="submit" class="btn btn-outline-primary btn-lg" value="送信する" id="checkButton">
+            <script>
+                function bottonClick() {
+                    if (checkbox1.checked) {
+                        //ここにwebスクレイピングの実行
+                    }
+                    else if (checkbox2.checked) {
+                        //ここにpdfスクレイピングの実行
+                    }
+                }
+            </script>
+        </form>
+    </div>
+    {% endblock %}

@@ -13,8 +13,8 @@ def Scraping(word,num_site):
     delete_ratio = 100
 
     # Google検索するキーワードを設定
-    search_word = word
-    search_word += "わかりやすく"
+    search_word = word + " "
+    search_word += "専門的"
     # 上位から何件までのサイトを抽出するか指定する
     num_site = int(num_site)
     pages_num = num_site + 1
@@ -134,6 +134,9 @@ def Scraping(word,num_site):
     SUM_TFIDF = {}
     SUM_TF = {}
     count_right = 0
+    print(WORDS)
+    result += "\n単語リスト\n" + " ".join(WORDS)+ "\n\n"
+    
     for index in range(count_site_correct):
         try:
             print("# TF values of blog:{}".format(BLOG[index]["url"]))
@@ -142,7 +145,7 @@ def Scraping(word,num_site):
             tfs_sorted = sorted(enumerate(sample_tfs), key=lambda x:x[1], reverse=True)
             for i, tf in tfs_sorted[:10]:
                 print("{}\t{}".format(WORDS[i], round(tf, 4)))
-                result += str(WORDS[i]) + "\t" + str(round(tf,4)) + "\n"
+                #result += str(WORDS[i]) + "\t" + str(round(tf,4)) + "\n"
             for i, tf in tfs_sorted:
                 if count_right == 0:
                         SUM_TF[str(WORDS[i])] = round(tf, 4)
@@ -158,7 +161,7 @@ def Scraping(word,num_site):
                 print("{}\t{}".format(WORDS[w_idx], round(idf, 4)))
                 #result += str(WORDS[w_idx]) + "\t" + str(round(tf,4)) + "\n"
             print("︙")
-            result += "︙\n" 
+            #result += "︙\n" 
             for w_idx, idf in idfs_sorted[-10:]:
                 print("{}\t{}".format(WORDS[w_idx], round(idf, 4)))
                 #result += str(WORDS[w_idx]) + "\t" + str(round(tf,4)) + "\n"
@@ -190,26 +193,25 @@ def Scraping(word,num_site):
     SUM_TF  = sorted(SUM_TF.items(), key=lambda x:x[1], reverse=True)
 
     print("\nトータルの集計 TF")
-    result += "トータルの集計 TF\n"
+    result += "\nトータルの集計 TF\n"
     for i in range(min(10,len(SUM_TF))):
         print("{}\t{}".format(SUM_TF[i][0], round(SUM_TF[i][1], 4)))
         result += str(SUM_TF[i][0]) +"\t" +  str(round(SUM_TF[i][1], 4)) + "\n"
         
 
     print("\nトータルの集計 IDF")
-    result += "トータルの集計 TDF\n"
+    result += "\nトータルの集計 TDF\n"
     for i in range(min(10,len(SUM_IDF))):
         print("{}\t{}".format(SUM_IDF[i][0], round(SUM_IDF[i][1], 4)))
         result += str(SUM_TF[i][0]) +"\t" +  str(round(SUM_TF[i][1], 4)) + "\n"
 
     print("\nトータルの集計 TF-IDF")
-    result += "トータルの集計 TF-IDF\n"
+    result += "\nトータルの集計 TF-IDF\n"
     for i in range(min(10,len(SUM_TFIDF))):
         print("{}\t{}".format(SUM_TFIDF[i][0], round(SUM_TFIDF[i][1], 4)))
         result += str(SUM_TF[i][0]) +"\t" +  str(round(SUM_TF[i][1], 4)) + "\n"
         
-    print(WORDS)
-    result += "\n\n単語リスト\n" + " ".join(WORDS) 
+    
     return result
 
 if __name__ == "__main__":

@@ -1,9 +1,15 @@
 {% extends 'mnist/base.html' %}
 {% block content %}
+
+<h1>PDFのテキスト抽出を行います</h3>
+  <p class="lead">文字起こししたいPDFファイルの<strong style = "color:rgb(0, 247, 164)">URL</strong>入力してください</p>
+  <p style="color:rgb(255, 106, 106)">※pdfファイルをアップロードできるように改修中</p>
+<div class="container-xl">
 <form action="" method="POST" enctype='multipart/form-data'>
   {{ form.file }}<hr>
   {% csrf_token %}
-  <button type="button" class="btn btn-secondary" onclick="location.reload()">入力されている単語をけす</button>
+  <button type="button" class="btn btn-secondary" onclick="location.reload()">URLを削除</button>
   <input type="submit" class="btn btn-outline-primary btn-lg" value="送信する">
-</form>                                                                                                                   
+</form>           
+</div>                                                                                                       
 {% endblock %}
