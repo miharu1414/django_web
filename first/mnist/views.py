@@ -30,7 +30,7 @@ class UploadView(generic.FormView):
     
 
 class Pdf_to_text_View(generic.FormView):
-    template_name = 'mnist/upload.html'
+    template_name = 'mnist/pdf_to_text.html'
     form_class = KakikomiForm
 
 
