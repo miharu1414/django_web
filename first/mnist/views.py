@@ -66,3 +66,6 @@ class PaintView(generic.TemplateView):
             'result': predict(img_array),
         }
         return render(self.request, 'mnist/result.html', context)
+
+
+

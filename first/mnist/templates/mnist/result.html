@@ -1,4 +1,10 @@
 {% extends 'mnist/base.html' %}
 {% block content %}
+<<<<<<< main
+<h1>結果は以下のようになりました</h1>
+<button type="button" class="btn btn-primary" onclick="history.back()">違う単語で検索する</button>
+<p>{{ result|linebreaksbr }} と判別されました。</p>
+=======
 <p>{{ result|linebreaksbr }} </p>
+>>>>>>> main
 {% endblock %}
