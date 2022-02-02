@@ -7,8 +7,8 @@
             {{ form.file }}
             <hr>
             {% csrf_token %}
-            <label><input type="checkbox" id="check1">webサイト</label>
-            <label style="display: block;"><input type="checkbox" id="check2">pdfファイル</label>
+            {{ form.check }}pdf
+            <br>
             <button type="button" class="btn btn-secondary" onclick="location.reload()">単語を削除</button>
             <input type="submit" class="btn btn-outline-primary btn-lg" value="送信する" id="checkButton">
             <script>
