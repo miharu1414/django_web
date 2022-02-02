@@ -21,7 +21,6 @@ class UploadView(generic.FormView):
      # アップロードファイル本体を取得
         Word = form.cleaned_data['file']
         Num_site = 1
-        
         # 推論した結果を、テンプレートへ渡して表示
         context = {
             'result': Scraping(Word,Num_site),
