@@ -12,7 +12,6 @@ class KakikomiForm(forms.Form):
         help_text='必須',
         )
         check = forms.BooleanField(
-            label='pdf',
-            required = False,
+        label="pdf",
+        required=False,
         )
-        

@@ -21,11 +21,16 @@ class UploadView(generic.FormView):
      # アップロードファイル本体を取得
         Word = form.cleaned_data['file']
         Num_site = 3
+        kind = form.cleaned_data["check"]
         # 推論した結果を、テンプレートへ渡して表示
-        kind = form.cleaned_data['check']
-        context = {
-            'result': Scraping_pdf(Word,Num_site),
-        }
+        if kind:
+            context = {
+                'result': Scraping_pdf(Word,Num_site),
+            }
+        else:
+            context = {
+                'result': Scraping(Word,Num_site),
+            }
         
         return render(self.request, 'mnist/result.html', context)
     
