@@ -1,6 +1,8 @@
 import base64
 from io import BytesIO
 import re
+from tabnanny import check
+from urllib import request
 from django.shortcuts import redirect, render
 from django.views import generic
 from .forms import ImageUploadForm, KakikomiForm
@@ -16,16 +18,20 @@ class UploadView(generic.FormView):
     template_name = 'mnist/upload.html'
     form_class = KakikomiForm
 
-
     def form_valid(self, form):
      # アップロードファイル本体を取得
         Word = form.cleaned_data['file']
-        Num_site = 1
-
+        Num_site = 3
+        kind = form.cleaned_data["check"]
         # 推論した結果を、テンプレートへ渡して表示
-        context = {
-            'result': Scraping(Word,Num_site),
-        }
+        if kind:
+            context = {
+                'result': Scraping_pdf(Word,Num_site),
+            }
+        else:
+            context = {
+                'result': Scraping(Word,Num_site),
+            }        
         return render(self.request, 'mnist/result.html', context)
     
 

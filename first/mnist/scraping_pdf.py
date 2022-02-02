@@ -194,7 +194,7 @@ def Scraping_pdf(Word, Num_site):
             tfs_sorted = sorted(enumerate(sample_tfs), key=lambda x:x[1], reverse=True)
             for i, tf in tfs_sorted[:10]:
                 print("{}\t{}".format(WORDS[i], round(tf, 4)))
-                result += str(WORDS[w_idx]) + "\t" + str(round(tf_idf,4)) + "\n"
+                result += str(WORDS[i]) + "\t" + str(round(tf,4)) + "\n"
             for i, tf in tfs_sorted:
                 if count_right == 0:
                     SUM_TF[str(WORDS[i])] = round(tf, 4)
@@ -208,7 +208,7 @@ def Scraping_pdf(Word, Num_site):
             result += "# IDF values\n"
             for w_idx, idf in idfs_sorted[:10]:
                 print("{}\t{}".format(WORDS[w_idx], round(idf, 4)))
-                result += str(WORDS[w_idx]) + "\n" + str(round(tf_idf, 4)) + "\n"
+                result += str(WORDS[w_idx]) + "\n" + str(round(idf, 4)) + "\n"
             print("︙")
             for w_idx, idf in idfs_sorted[-10:]:
                 print("{}\t{}".format(WORDS[w_idx], round(idf, 4)))
